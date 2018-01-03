@@ -75,7 +75,7 @@ def showLogRegress(weights, train_x, train_y):
     # draw all samples
     for i in xrange(numSamples):
         if int(train_y[i, 0]) == 0:
-            plt.plot(train_x[i, 1], train_x[i, 2], 'or')
+            plt.plot(train_x[i, 1], train_x[i, 2], 'or') #point
         elif int(train_y[i, 0]) == 1:
             plt.plot(train_x[i, 1], train_x[i, 2], 'ob')
 
