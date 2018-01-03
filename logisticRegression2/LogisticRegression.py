@@ -27,6 +27,7 @@ def sigmoid(X):
     gz = 1.0/den
     return gz
 
+#计算
 def compute_cost(theta,X,y):
     '''''computes cost given predicted and actual values'''
     m = X.shape[0] #number of training examples
