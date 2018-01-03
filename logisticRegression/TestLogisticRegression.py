@@ -20,20 +20,28 @@ def loadData():
     return np.mat(train_x),np.mat(train_y).transpose()
 
 
-train_x, train_y = loadData()
+def main():
 
-test_x = train_x; test_y = train_y
+    train_x, train_y = loadData()
 
-
-#training
-opts= {'alpha':0.01,'maxIter':50,'optimizeType':'stocGradDescent'}
-optimalWeights = trainLogRegression(train_x,train_y,opts)
+    test_x = train_x; test_y = train_y
 
 
-#testing
-accuracy =testLogRegression(optimalWeights,test_x,test_y)
+    #training
+    #opts= {'alpha':0.01,'maxIter':50,'optimizeType':'stocGradDescent'}
+    opts= {'alpha':0.01,'maxIter':50,'optimizeType':'smoothStocGradDescent'}
+    optimalWeights = trainLogRegression(train_x,train_y,opts)
 
-print 'the classification accuracy is :%.3f%%' %(accuracy * 100)
+
+    #testing
+    accuracy =testLogRegression(optimalWeights,test_x,test_y)
+
+    print 'the classification accuracy is :%.3f%%' %(accuracy * 100)
 
 
-showLogRegress(optimalWeights,test_x,test_y)
+    showLogRegress(optimalWeights,test_x,test_y)
+
+
+
+if __name__ =='__main__':
+    main()

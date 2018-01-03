@@ -3,6 +3,7 @@ __author__ = 'tend'
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import random
 
 #target function
 def sigmoid(inX):
@@ -28,12 +29,19 @@ def trainLogRegression(train_x,train_y,opts):
                 output = sigmoid(train_x[i,:] *weights) #get data of row i
                 error = train_y[i,0] - output
                 weights = weights + alpha * train_x[i,:].transpose() *error
+        elif opts['optimizeType'] =='smoothStocGradDescent':
+            #randomly select samples to optimize for reducing cycle fluctations
+            dataIndex = range(numSample)
+            for i in range(numSample):
+                alpha = 4.0/(1.0 + k +i) +0.01
+                randIndex = int(random.uniform(0,len(dataIndex)))
+                output = sigmoid(train_x[randIndex,:] *weights)
+                error = train_y[randIndex,0] -output
+                weights = weights + alpha * train_x[randIndex,:].transpose() * error
+                del(dataIndex[randIndex])#during one interation ,delete the optimized sample
 
         else:
             raise NameError("Not support oprimize method type!")
-
-
-
 
 
     print 'Congratulations, training complete! Took %fs!' %(time.time() - startTime)
