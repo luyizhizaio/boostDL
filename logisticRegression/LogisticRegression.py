@@ -80,13 +80,13 @@ def showLogRegress(weights, train_x, train_y):
             plt.plot(train_x[i, 1], train_x[i, 2], 'ob')
 
     # draw the classify line
-    # according w0+w1x1 +w2x2 =0 depict
+    # according w0+w1x1 +w2x2 =0 depict  line
     min_x = min(train_x[:, 1])[0, 0]
     max_x = max(train_x[:, 1])[0, 0]
     weights = weights.getA()  # convert mat to array
     y_min_x = float(-weights[0] - weights[1] * min_x) / weights[2]
     y_max_x = float(-weights[0] - weights[1] * max_x) / weights[2]
-    plt.plot([min_x, max_x], [y_min_x, y_max_x], '-g')
+    plt.plot([min_x, max_x], [y_min_x, y_max_x], '-g') #line
     plt.xlabel('X1'); plt.ylabel('X2')
 
     plt.show()
