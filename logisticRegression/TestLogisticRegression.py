@@ -1,6 +1,6 @@
 __author__ = 'tend'
 
-from numpy import *
+import numpy as np
 import matplotlib.pyplot as plt
 
 import time
@@ -17,7 +17,7 @@ def loadData():
         train_y.append(float(lineArr[2].strip()))
 
 
-    return mat(train_x),mat(train_y).transpose()
+    return np.mat(train_x),np.mat(train_y).transpose()
 
 
 train_x, train_y = loadData()
@@ -26,7 +26,7 @@ test_x = train_x; test_y = train_y
 
 
 #training
-opts= {'alpha':0.01,'maxIter':20,'optimizeType':'gradDescent'}
+opts= {'alpha':0.01,'maxIter':50,'optimizeType':'stocGradDescent'}
 optimalWeights = trainLogRegression(train_x,train_y,opts)
 
 

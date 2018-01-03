@@ -1,21 +1,21 @@
 __author__ = 'tend'
 
-from numpy import *
+import numpy as np
 import matplotlib.pyplot as plt
 import time
 
 #target function
 def sigmoid(inX):
-    return 1.0 / (1 +exp(-inX))
+    return 1.0 / (1 +np.exp(-inX))
 
 def trainLogRegression(train_x,train_y,opts):
 
     startTime = time.time()
 
-    numSample,numFeatures = shape(train_x)
+    numSample,numFeatures = np.shape(train_x)
 
     alpha = opts['alpha'];maxIter=opts['maxIter']
-    weights = ones((numFeatures,1))
+    weights = np.ones((numFeatures,1))
 
 
     for k in range(maxIter):
@@ -42,7 +42,7 @@ def trainLogRegression(train_x,train_y,opts):
 
 def testLogRegression(weights,test_x,test_y):
 
-    numSamples,numFeatures = shape(test_x)
+    numSamples,numFeatures = np.shape(test_x)
     matchCount =0
     for i in xrange(numSamples):
         predict = sigmoid(test_x[i,:] * weights)[0,0] >0.5
@@ -57,10 +57,12 @@ def testLogRegression(weights,test_x,test_y):
 # show your trained logistic regression model only available with 2-D data
 def showLogRegress(weights, train_x, train_y):
     # notice: train_x and train_y is mat datatype
-    numSamples, numFeatures = shape(train_x)
+    numSamples, numFeatures = np.shape(train_x)
     if numFeatures != 3:
         print "Sorry! I can not draw because the dimension of your data is not 2!"
         return 1
+
+
 
     # draw all samples
     for i in xrange(numSamples):
@@ -70,6 +72,7 @@ def showLogRegress(weights, train_x, train_y):
             plt.plot(train_x[i, 1], train_x[i, 2], 'ob')
 
     # draw the classify line
+    # according w0+w1x1 +w2x2 =0 depict
     min_x = min(train_x[:, 1])[0, 0]
     max_x = max(train_x[:, 1])[0, 0]
     weights = weights.getA()  # convert mat to array
@@ -77,6 +80,7 @@ def showLogRegress(weights, train_x, train_y):
     y_max_x = float(-weights[0] - weights[1] * max_x) / weights[2]
     plt.plot([min_x, max_x], [y_min_x, y_max_x], '-g')
     plt.xlabel('X1'); plt.ylabel('X2')
+
     plt.show()
 
 
