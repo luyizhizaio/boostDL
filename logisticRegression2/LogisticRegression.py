@@ -4,7 +4,7 @@ __author__ = 'tend'
 import numpy as np
 from pylab import scatter,show,legend,xlabel,ylabel
 
-data = np.loadtxt('data1.txt', delimiter=',')
+data = np.loadtxt('testSet.txt', delimiter=',')
 
 X = data[:,0:2]
 y = data[:,2]
@@ -27,7 +27,7 @@ def sigmoid(X):
     gz = 1.0/den
     return gz
 
-#计算
+#
 def compute_cost(theta,X,y):
     '''''computes cost given predicted and actual values'''
     m = X.shape[0] #number of training examples

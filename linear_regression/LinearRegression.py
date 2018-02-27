@@ -73,7 +73,7 @@ def plot_data(data,b,m):
     y = data[:,1]
     y_predict = m*x+b
     pylab.plot(x,y,'o')
-    pylab.plot(x,y_predict,'k-')
+    pylab.plot(x,y_predict,'k-') #line
     pylab.show()
 
 
