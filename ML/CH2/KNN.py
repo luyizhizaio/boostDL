@@ -2,6 +2,7 @@
 __author__ = 'tend'
 from numpy import *
 import operator
+from os import listdir  #读取目录
 
 #create dataset
 def createDataSet():
@@ -149,7 +150,64 @@ def classifyPersion():
 
 
 
-classifyPersion()
+#classifyPersion()
+
+
+
+#图片转成向量
+def img2vector(filename):
+
+    returnVect = zeros((1,1024))
+    fr = open(filename)
+    for i in range(32):
+        lineStr = fr.readline()
+        for j in range(32):
+            returnVect[0,32 * i + j] = int(lineStr[j])
+    return returnVect
+
+#执行
+testVector = img2vector('testDigits/0_13.txt')
+print testVector[0,0:31]
+
+
+
+def handwritingClassTest():
+    hwLabels = [] #定义一个向量
+    #获取目录内容
+    trainingFileList = listdir('trainingDigits') #获取文件名称列表
+    m = len(trainingFileList)
+    trainingMat = zeros((m,1024)) #m行1024列矩阵
+    for i in range(m):
+        fileNameStr = trainingFileList[i]
+        fileStr = fileNameStr.split('.')[0]
+        classNumStr = int(fileStr.split('_')[0])
+        hwLabels.append(classNumStr) #向量里增加值
+        trainingMat[i,:] = img2vector('trainingDigits/%s' % fileNameStr)
+
+    testFileList = listdir('testDigits')
+    errorCount = 0.0
+    mTest = len(testFileList)
+    for i in range(mTest):
+        fileNameStr = testFileList[i]
+        fileStr = fileNameStr.split('.')[0]
+        classNumStr = int(fileStr.split('_')[0])
+        vectorUnderTest = img2vector('testDigits/%s' % fileNameStr)
+
+        classifierResult = classify0(vectorUnderTest,trainingMat,hwLabels,3)
+        print "the classifier came back with :%d,the real answer is :%d" % (classifierResult,classNumStr)
+
+        if (classifierResult != classNumStr): errorCount +=1.0
+
+    print  "\nthe totla number of errors is : %d" % errorCount
+    print "\nthe total error rate is : %f" % (errorCount /float(mTest))
+
+
+#执行
+handwritingClassTest()
+
+
+
+
 
 
 
