@@ -2,6 +2,7 @@
 __author__ = 'tend'
 
 from math import log
+import operator
 
 
 #计算信息熵
@@ -63,14 +64,14 @@ print splitDataSet(myDat,0,0)
 
 
 
-#选择最好的数据集划分方式
+#选择最好的数据集划分方式, 返回特征下标
 def chooseBestFeatureToSplit(dataSet):
     numFeatures = len(dataSet[0]) -1
     baseEntropy = calcShannonEnt(dataSet)
     bestInfoGain = 0.0
     bestFeature = -1
     for i in range (numFeatures):
-        featList = [example[i] for example in dataSet]
+        featList = [example[i] for example in dataSet] #第一列属性值
         uniqueVals = set(featList)
         newEntropy = 0.0
         for value in uniqueVals:
@@ -89,13 +90,67 @@ print chooseBestFeatureToSplit(myDat)
 
 
 
+#获取数量最大的分类名称
+def majorityCnt(classList):
+
+    classCount={}
+    for vote in classList:
+        if vote not in classCount.keys(): classCount[vote] = 0
+        classCount[vote] += 1
+    #排序，降序
+    sortedClassCount = sorted(classCount.iteritems(),key=operator.itemgetter(1),reverse =True)
+    return sortedClassCount[0][0]
+
+
+#创建树
+
+#参数列表，数据集和标签列表;返回嵌套字典
+def createTree(dataSet,labels):
+    classList = [example[-1] for example in dataSet]
+    #类别相同停止划分
+    if classList.count(classList[0]) == len(classList):
+        return classList[0]
+    #遍历完所有特征返回出现次数最多的
+    if len(dataSet[0]) == 1:
+        return majorityCnt(classList)
+
+    bestFeat = chooseBestFeatureToSplit(dataSet) #计算信息增益，选择出最好的特征
+    bestFeatLabel = labels[bestFeat]
+    myTree = {bestFeatLabel:{}}
+    del(labels[bestFeat])
+    featValues = [example[bestFeat] for example in dataSet]
+    uniqueVals = set(featValues)
+    for value in uniqueVals:
+        subLabels = labels[:]
+        myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet,bestFeat,value),subLabels)
+    return myTree
+
+
+def createTree2(dataSet,labels):
+    classList = [example[-1] for example in dataSet] #统计每个分类列
+    if classList.count(classList[0]) == len(classList):
+        return classList[0]
+
+    if len(dataSet[0]) ==1:
+        return majorityCnt(classList) #计算数量最多的分类
+    bestFeat = chooseBestFeatureToSplit(dataSet)
+    bestFeatLabel = labels[bestFeat]
+    myTree = {bestFeatLabel:{}}
+    del(labels[bestFeat])  #删除列表中元素
+    featValues = [example[bestFeat] for example in dataSet]
+    uniqueVals = set(featValues) #排重
+    for value in uniqueVals: #得到每个特征值
+        subLabels=labels[:] #复制标签,为了不改变参数列表中的labels
+        myTree[bestFeatLabel][value] = createTree2(splitDataSet(dataSet,bestFeat,value),subLabels)
+    return myTree
+
+
+#执行
+myDat ,labels = createDataSet()
+mytree = createTree(myDat,labels)
+
+print mytree
 
 
 
-
-
-
-
-
-
-
+#绘制树图形
