@@ -153,4 +153,51 @@ print mytree
 
 
 
-#绘制树图形
+#使用决策树的分类函数
+def classify(inputTree,featLabels,testVec):
+    firstStr = inputTree.keys()[0]  #获取字典的key
+    secondDict=inputTree[firstStr]  #根据key获取value
+    featIndex = featLabels.index(firstStr) #第一个key的索引
+    for key in secondDict.keys():
+        if testVec[featIndex] == key:
+            if type(secondDict[key]).__name__ =='dict': #
+                classLabel = classify(secondDict[key],featLabels,testVec)
+            else: classLabel = secondDict[key]
+    return classLabel
+
+
+#execute
+
+import treePlotter
+
+myDat,labels = createDataSet()
+
+myTree = treePlotter.retrieveTree(0)
+
+#执行分类算法
+#print classify(myTree,labels,[0,1])
+
+
+
+
+#存储tree ，使用pickle序列化对象
+def storeTree(inputTree,filename):
+    import pickle
+    fw = open(filename,'w')
+    pickle.dump(inputTree,fw)
+    fw.close()
+
+def grabTree(filename):
+    import pickle
+    fr = open(filename)
+    return pickle.load(fr)
+
+#execute
+
+storeTree(myTree,'classifierStorage,txt')
+
+tree1 = grabTree('classifierStorage,txt')
+print tree1
+
+
+

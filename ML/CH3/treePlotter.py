@@ -81,8 +81,8 @@ print getTreeDepth(myTree)
 #plotTree函数
 
 def plotMidText(cntrPt,parentPt,txtString):
-    xMid =(parentPt[0]-cntrPt[0]/2.0 + cntrPt[0])
-    yMid = (parentPt[1] - cntrPt[1]/2.0 + cntrPt[1])
+    xMid =(parentPt[0]-cntrPt[0])/2.0 + cntrPt[0]
+    yMid = (parentPt[1] - cntrPt[1])/2.0 + cntrPt[1]
     createPlot.ax1.text(xMid,yMid,txtString)
 
 
@@ -122,7 +122,7 @@ def createPlot(inTree):
 #创建树
 myTree = retrieveTree(0)
 
-createPlot(myTree)
+#createPlot(myTree)
 
 
 
