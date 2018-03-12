@@ -63,7 +63,7 @@ def getTreeDepth(myTree):
 
 #构造树
 def retrieveTree(i):
-    #定义一个list
+    #定义一个list; 0,1是属性值；yes,no 是标签值
     listOfTrees =[{'no surfacing':{0:'no',1:{'flippers':{0:'no',1:'yes'}}}},
                   {'no surfacing':{0:'no',1:{'flippers':{0:{'head':{0:'no',1:'yes'}},1:'no'}}}}
                   ]
