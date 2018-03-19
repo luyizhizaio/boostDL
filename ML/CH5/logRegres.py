@@ -35,7 +35,7 @@ def gradAscent(dataMatIn,classLabels):
         error = (labelMat - h)
         weights = weights + alpha * dataMatrix.transpose()*error #转置成n行3列的矩阵
 
-    return weights
+    return weights  #返回的为矩阵
 
 
 
@@ -48,9 +48,9 @@ print weight
 
 
 #画出数据集的最佳拟合函数
-def plotBestFit(wei):
+def plotBestFit(weights):
     import matplotlib.pyplot as plt
-    weights =wei.getA() #返回数组
+    #weights =wei.getA() #返回数组
     dataMat,labelMat = loadDataSet()
     dataArr=array(dataMat) #转成数组
     n = shape(dataArr)[0] #数据集行数
@@ -77,4 +77,83 @@ def plotBestFit(wei):
 
 
 #执行
-plotBestFit(weight)
+plotBestFit(weight.getA())
+
+
+
+
+#随机梯度上升，
+
+def stocGradAscent0(dataMatrix,classLabels):
+    m,n =shape(dataMatrix)
+    alpha = 0.01
+    weights = ones(n)
+    for i in range(m):
+        h = sigmoid(sum(dataMatrix[i]*weights)) #sum把此行的值加起来
+        error = classLabels[i] -h
+        weights = weights + alpha * error * dataMatrix[i]
+
+    return weights #返回的为数组
+
+
+dataMat,labelMat= loadDataSet()
+weights = stocGradAscent0(array(dataMat),labelMat)
+
+print 'stocGradAscent'
+print weights
+plotBestFit(weights)
+
+
+
+
+#改进的随机梯度上升算法
+
+def stocGradAscent1(dataMatrix,classLabels,numIter = 150):
+
+    m,n = shape(dataMatrix)
+    weights = ones(n) #返回长度为n值为1的数组
+    for j in range(numIter):
+        dataIndex = range(m) #返回0到m-1的数组
+        for i in range(m):
+            alpha = 4/(1.0+j+i) +0.0001 #步长是递减的
+            randIndex = int(random.uniform(0,len(dataIndex))) #随机下标
+            h = sigmoid(sum(dataMatrix[randIndex] *weights))
+
+            error = classLabels[randIndex] - h
+            weights = weights + alpha * error * dataMatrix[randIndex]
+            del(dataIndex[randIndex]) #从数组中删除元素
+    return weights
+
+
+
+dataMat,labelMat = loadDataSet()
+
+weights = stocGradAscent1(array(dataMat),labelMat)
+
+print  weights
+
+plotBestFit(weights)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
