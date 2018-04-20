@@ -37,18 +37,56 @@ def setOfWords2Vec(vocabList,inputSet):
 
 
 #执行
+#listOPosts,listClasses = loadDataSet()
+
+#myVocabList = createVocabList(listOPosts)
+
+#print myVocabList
+
+
+#print setOfWords2Vec(myVocabList,listOPosts[0])
+
+
+
+#bayes 分类器训练函数
+def trainNB0(trainMatrix,trainCategory):
+    #训练样本的数量
+    numTrainDocs = len(trainMatrix)
+    #样本的特征数
+    numWords = len(trainMatrix[0])
+    #正样本的比例
+    pAbusive = sum(trainCategory)/float(numTrainDocs)
+    #创建数组
+    p0Num=zeros(numWords)
+    p1Num = zeros(numWords)
+    #每个类别的总词数
+    p0Denom =0.0;p1Denom =0.0
+    for i in range(numTrainDocs):
+        if trainCategory[i] ==1:
+            p1Num += trainMatrix[i]
+            p1Denom += sum(trainMatrix[i])
+        else:
+            p0Num += trainMatrix[i]
+            p0Denom += sum(trainMatrix[i])
+    p1Vec = p1Num/p1Denom #类型为1时各个词的概率。
+    p0Vec = p0Num/p0Denom
+    return p0Vec,p1Vec,pAbusive
+
+
+#执行
 listOPosts,listClasses = loadDataSet()
 
 myVocabList = createVocabList(listOPosts)
 
-print myVocabList
+trainMat = [] #创建一个矩阵
+for postInDoc in listOPosts:
+    trainMat.append(setOfWords2Vec(myVocabList,postInDoc))
 
+p0V,p1V,pAb = trainNB0(trainMat,listClasses)
 
-print setOfWords2Vec(myVocabList,listOPosts[0])
+print(pAb)
 
-
-
-
+print(p0V)
 
 
 
