@@ -68,7 +68,7 @@ def trainNB0(trainMatrix,trainCategory):
         else:
             p0Num += trainMatrix[i]
             p0Denom += sum(trainMatrix[i])
-    p1Vec = p1Num/p1Denom #类型为1时各个词的概率。
+    p1Vec = p1Num/p1Denom #类型为1的条件下每个词的频率。
     p0Vec = p0Num/p0Denom
     return p0Vec,p1Vec,pAbusive
 
@@ -89,9 +89,58 @@ print(pAb)
 print(p0V)
 
 
+#根据显示情况修改分类器
+
+#使用贝叶斯是计算概率的积时，如果一个概率为0，最后得到的概率也为0；可以将所有的词初始化为1，并将坟墓初始化为2
+
+#bayes 分类器训练函数
+def trainNB02(trainMatrix,trainCategory):
+    #训练样本的数量
+    numTrainDocs = len(trainMatrix)
+    #样本的特征数
+    numWords = len(trainMatrix[0])
+    #正样本的比例
+    pAbusive = sum(trainCategory)/float(numTrainDocs)
+    #创建数组
+    p0Num=ones(numWords)
+    p1Num = ones(numWords)
+    #每个类别的总词数
+    p0Denom =2.0;p1Denom =2.0
+    for i in range(numTrainDocs):
+        if trainCategory[i] ==1:
+            p1Num += trainMatrix[i]
+            p1Denom += sum(trainMatrix[i])
+        else:
+            p0Num += trainMatrix[i]
+            p0Denom += sum(trainMatrix[i])
+    p1Vec = log(p1Num/p1Denom) #类型为1的条件下每个词的频率。
+    p0Vec = log(p0Num/p0Denom)
+    return p0Vec,p1Vec,pAbusive
 
 
 
+#朴素贝叶斯份分类函数
+def classifyNB(vec2Classify,p0Vec,p1Vec,pClass1):
+    p1 = sum(vec2Classify * p1Vec) + log(pClass1)
+    p0 = sum(vec2Classify * p0Vec) + log(1- pClass1)
+    if p1 > p0:
+        return 1
+    else:
+        return 0
+
+def testingNB():
+    listOPosts,listClass = loadDataSet()
+    myVocabList = createVocabList(listOPosts)
+    trainMat=[]
+    for postInDoc in listOPosts:
+        trainMat.append(setOfWords2Vec(myVocabList,postInDoc))
+    p0V,p1v,pAb = trainNB02(array(trainMat),array(listClasses))
+    testEntry = ['love','my','dalmation']
+    thisDoc = array(setOfWords2Vec(myVocabList,testEntry))
+    print testEntry,'classified as :',classifyNB(thisDoc,p0V,p1v,pAb)
+    testEntry = ['stupid','garbage']
+    thisDoc = array(setOfWords2Vec(myVocabList,testEntry))
+    print testEntry,'classified as: ',classifyNB(thisDoc,p0V,p1V,pAb)
 
 
 
