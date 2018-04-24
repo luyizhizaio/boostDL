@@ -115,34 +115,45 @@ def trainNB02(trainMatrix,trainCategory):
             p0Denom += sum(trainMatrix[i])
     p1Vec = log(p1Num/p1Denom) #类型为1的条件下每个词的频率。
     p0Vec = log(p0Num/p0Denom)
-    return p0Vec,p1Vec,pAbusive
+    return p0Vec,p1Vec,pAbusive  #返回结果：分类为0的各词的概率向量，分类为1的各词的概率向量，数据集中正样本的比例
 
 
 
 #朴素贝叶斯份分类函数
 def classifyNB(vec2Classify,p0Vec,p1Vec,pClass1):
     p1 = sum(vec2Classify * p1Vec) + log(pClass1)
-    p0 = sum(vec2Classify * p0Vec) + log(1- pClass1)
-    if p1 > p0:
+    p0 = sum(vec2Classify * p0Vec) + log(1 - pClass1)
+    if p1 > p0: #那个概率高就属于哪个分类
         return 1
     else:
         return 0
 
+#测试NB函数
 def testingNB():
+    #加载训练数据
     listOPosts,listClass = loadDataSet()
+    #生成词汇表
     myVocabList = createVocabList(listOPosts)
+    #训练数据集的矩阵
     trainMat=[]
     for postInDoc in listOPosts:
         trainMat.append(setOfWords2Vec(myVocabList,postInDoc))
+
+    #各值：分类为0的各词的概率向量，分类为1的各词的概率向量，数据集中正样本的比例
     p0V,p1v,pAb = trainNB02(array(trainMat),array(listClasses))
     testEntry = ['love','my','dalmation']
+    #返回测试集向量
     thisDoc = array(setOfWords2Vec(myVocabList,testEntry))
+
     print testEntry,'classified as :',classifyNB(thisDoc,p0V,p1v,pAb)
     testEntry = ['stupid','garbage']
     thisDoc = array(setOfWords2Vec(myVocabList,testEntry))
     print testEntry,'classified as: ',classifyNB(thisDoc,p0V,p1V,pAb)
 
 
+#执行
+testingNB()
+#
 
 
 
