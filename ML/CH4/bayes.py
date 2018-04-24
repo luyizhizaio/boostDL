@@ -121,9 +121,9 @@ def trainNB02(trainMatrix,trainCategory):
 
 #朴素贝叶斯份分类函数
 def classifyNB(vec2Classify,p0Vec,p1Vec,pClass1):
-    p1 = sum(vec2Classify * p1Vec) + log(pClass1)
+    p1 = sum(vec2Classify * p1Vec) + log(pClass1) #防止下溢问题，返回的概率是带log的，所以这里也带个log。
     p0 = sum(vec2Classify * p0Vec) + log(1 - pClass1)
-    if p1 > p0: #那个概率高就属于哪个分类
+    if p1 > p0: #那个概率高就属于哪个分类，log函数是个单调增函数，所以对结果没影响。
         return 1
     else:
         return 0
