@@ -157,6 +157,13 @@ testingNB()
 
 
 
+#词袋模型处理数据特征
+def bagOfWords2VecMN(vocabList,inputSet):
+    returnVec = [0] * len(vocabList)
+    for word in inputSet:
+        if word in vocabList:
+            returnVec[vocabList.index(word)] +=1
+    return returnVec
 
 
 
