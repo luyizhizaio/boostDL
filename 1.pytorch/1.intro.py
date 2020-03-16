@@ -1,3 +1,3 @@
 import numpy as np
 
-np.range(0,4)
+np.arange(0,4)
