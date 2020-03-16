@@ -2,6 +2,6 @@
 
 python version 3.6
 
-content：
+##content：
 1.pytorch
 2.tensorflow
